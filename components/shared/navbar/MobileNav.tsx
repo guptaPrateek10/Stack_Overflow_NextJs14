@@ -37,10 +37,10 @@ const NavContent = () => {
                 height={320}
                 className={`${isActive ? "" : "invert-colors"}`}
               />
+              <p className={`${isActive ? "base-bold" : "base-medium"}`}>
+                {item.label}
+              </p>
             </Link>
-            <p className={`${isActive ? "base-bold" : "base-medium"}`}>
-              {item.label}
-            </p>
           </SheetClose>
         );
       })}
