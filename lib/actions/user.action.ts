@@ -14,7 +14,11 @@ export async function getUserById(params: any) {
   try {
     connectToDatabase();
     const { userId } = params;
-    const user = await User.findOne({ clerkId: userId });
+    const user = await User.findOne({ userId });
+    console.log(
+      "=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>user",
+      user
+    );
     return user;
   } catch (error) {
     console.log(error);
