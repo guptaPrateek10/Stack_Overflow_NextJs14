@@ -63,7 +63,7 @@ const Question = ({ mongoUserId }: props) => {
         author: JSON.parse(mongoUserId),
         path: pathname,
       });
-
+      // sample
       router.push("/");
     } catch (error) {
       console.log(error);
