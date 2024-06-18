@@ -41,6 +41,7 @@ export async function createQuestion(params: CreateQuestionParams) {
 
 export async function getQuestions(params: GetQuestionsParams) {
   try {
+    connectToDatabase();
     const questions = await Question.find({})
       .populate({
         path: "tags",
