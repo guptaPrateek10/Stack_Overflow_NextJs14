@@ -35,7 +35,7 @@ export async function createQuestion(params: CreateQuestionParams) {
     });
     revalidatePath(path);
   } catch (error) {
-    /* empty */
+    /* to do empty for now */
   }
 }
 
