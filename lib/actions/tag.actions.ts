@@ -6,6 +6,7 @@ import { connectToDatabase } from "../mongoose";
 export async function getTopInteractedTags(params: any) {
   try {
     connectToDatabase();
+    // eslint-disable-next-line no-unused-vars
     const { userId, limit = 3 } = params;
     const user = await User.findById(userId);
 
