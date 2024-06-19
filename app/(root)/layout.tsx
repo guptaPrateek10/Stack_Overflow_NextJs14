@@ -2,6 +2,7 @@ import LeftSideBar from "@/components/shared/LeftSidebar";
 import RightSidebar from "@/components/shared/RightSidebar";
 import Navbar from "@/components/shared/navbar/Navbar";
 import React from "react";
+import "../../styles/prism.css";
 
 type LayoutProps = {
   children: React.ReactNode;

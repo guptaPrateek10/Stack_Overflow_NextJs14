@@ -43,9 +43,8 @@ const Question = ({ mongoUserId }: props) => {
   const form = useForm<z.infer<typeof QuestionSchema>>({
     resolver: zodResolver(QuestionSchema),
     defaultValues: {
-      title: "How do you handle concurrency in a multi-threaded application?",
-      explanation:
-        "The avarage answer time is 10 seconds & if you want quick answer, it's 15 seconds.",
+      title: "",
+      explanation: "",
       tags: [],
     },
   });
@@ -69,14 +68,12 @@ const Question = ({ mongoUserId }: props) => {
       console.log(error);
     }
   }
-
   const handleInputKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
     field: any
   ) => {
     if (e.key === "Enter" && field.name === "tags") {
       e.preventDefault();
-
       const tagInput = e.target as HTMLInputElement;
       const tagValue = tagInput.value.trim();
 

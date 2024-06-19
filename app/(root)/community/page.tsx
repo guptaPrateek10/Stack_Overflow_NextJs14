@@ -3,7 +3,7 @@ import Filter from "@/components/shared/Filter";
 import LocalSearchbar from "@/components/shared/search/LocalSearchbar";
 import { UserFilters } from "@/constants/filters";
 import { getAllUsers } from "@/lib/actions/user.action";
-import { Link } from "lucide-react";
+import Link from "next/link";
 import React from "react";
 
 const Page = async () => {
@@ -14,10 +14,10 @@ const Page = async () => {
       <h1 className="h1-bold text-dark100_light900">All Users</h1>
       <div className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center">
         <LocalSearchbar
-          route="/"
+          route="/community"
           iconPosition="left"
           imgSrc="/assets/icons/search.svg"
-          placeholder="Search for questions"
+          placeholder="Search for amazing minds"
           otherClasses="flex-1"
         />
         <Filter
