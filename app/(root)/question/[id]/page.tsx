@@ -1,9 +1,12 @@
 import Answer from "@/components/forms/Answer";
+import AllAnswers from "@/components/shared/AllAnswers";
 import Metric from "@/components/shared/Matric";
 import ParseHTML from "@/components/shared/ParseHTML";
 import RenderTag from "@/components/shared/RenderTag";
 import { getQuestionById } from "@/lib/actions/question.action";
+import { getUserById } from "@/lib/actions/user.action";
 import { getTimestamp, formatAndDivideNumber } from "@/lib/utils";
+import { auth } from "@clerk/nextjs";
 import { Link } from "lucide-react";
 import Image from "next/image";
 import React from "react";
@@ -13,7 +16,12 @@ interface props {
 }
 const page = async ({ params, searchParams }: props) => {
   const result = await getQuestionById({ questionId: params.id });
-  console.log("result>>>>>>>>>", result);
+  const { userId: clerkId } = auth();
+  let mongoUser;
+  if (clerkId) {
+    mongoUser = await getUserById({ userId: clerkId });
+  }
+
   return (
     <>
       <div className="flex-start w-full flex-col">
@@ -87,7 +95,20 @@ const page = async ({ params, searchParams }: props) => {
           />
         ))}
       </div>
-      <Answer />
+
+      <AllAnswers
+        questionId={result._id}
+        userId={JSON.stringify(mongoUser._id)}
+        totalAnswers={result.answers.length}
+        // page={searchParams?.page}
+        // filter={searchParams?.filter}
+      />
+
+      <Answer
+        question={result.content}
+        questionId={JSON.stringify(result._id)}
+        authorId={JSON.stringify(mongoUser!._id)}
+      />
       {/* <AllAnswers 
         questionId={result._id}
         userId={mongoUser._id}
