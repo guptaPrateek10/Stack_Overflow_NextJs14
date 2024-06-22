@@ -3,6 +3,7 @@ import AllAnswers from "@/components/shared/AllAnswers";
 import Metric from "@/components/shared/Matric";
 import ParseHTML from "@/components/shared/ParseHTML";
 import RenderTag from "@/components/shared/RenderTag";
+import Votes from "@/components/shared/Votes";
 import { getQuestionById } from "@/lib/actions/question.action";
 import { getUserById } from "@/lib/actions/user.action";
 import { getTimestamp, formatAndDivideNumber } from "@/lib/utils";
@@ -21,7 +22,6 @@ const page = async ({ params, searchParams }: props) => {
   if (clerkId) {
     mongoUser = await getUserById({ userId: clerkId });
   }
-
   return (
     <>
       <div className="flex-start w-full flex-col">
@@ -42,7 +42,7 @@ const page = async ({ params, searchParams }: props) => {
             </p>
           </Link>
           <div className="flex justify-end">
-            {/* <Votes
+            <Votes
               type="Question"
               itemId={JSON.stringify(result._id)}
               userId={JSON.stringify(mongoUser._id)}
@@ -51,7 +51,7 @@ const page = async ({ params, searchParams }: props) => {
               downvotes={result.downvotes.length}
               hasdownVoted={result.downvotes.includes(mongoUser._id)}
               hasSaved={mongoUser?.saved.includes(result._id)}
-            /> */}
+            />
           </div>
         </div>
         <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full text-left">
@@ -98,7 +98,7 @@ const page = async ({ params, searchParams }: props) => {
 
       <AllAnswers
         questionId={result._id}
-        userId={JSON.stringify(mongoUser._id)}
+        userId={mongoUser._id}
         totalAnswers={result.answers.length}
         // page={searchParams?.page}
         // filter={searchParams?.filter}
@@ -109,19 +109,6 @@ const page = async ({ params, searchParams }: props) => {
         questionId={JSON.stringify(result._id)}
         authorId={JSON.stringify(mongoUser!._id)}
       />
-      {/* <AllAnswers 
-        questionId={result._id}
-        userId={mongoUser._id}
-        totalAnswers={result.answers.length}
-        page={searchParams?.page}
-        filter={searchParams?.filter}
-      /> */}
-
-      {/* <Answer 
-        question={result.content}
-        questionId={JSON.stringify(result._id)}
-        authorId={JSON.stringify(mongoUser._id)}
-      /> */}
     </>
   );
 };
