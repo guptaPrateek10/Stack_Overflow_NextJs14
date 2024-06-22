@@ -1,7 +1,7 @@
 "use client";
 
 import { downvoteAnswer, upvoteAnswer } from "@/lib/actions/answer.action";
-// import { viewQuestion } from "@/lib/actions/interaction.action";
+import { viewQuestion } from "@/lib/actions/interaction.action";
 import {
   downvoteQuestion,
   upvoteQuestion,
@@ -9,8 +9,8 @@ import {
 import { toggleSaveQuestion } from "@/lib/actions/user.action";
 import { formatAndDivideNumber } from "@/lib/utils";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-// import { useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useRef } from "react";
 // import { toast } from "../ui/use-toast";
 
 interface Props {
@@ -35,8 +35,8 @@ const Votes = ({
   hasSaved,
 }: Props) => {
   const pathname = usePathname();
-  // const router = useRouter();
-
+  const router = useRouter();
+  const isInitialMount = useRef(true);
   const handleSave = async () => {
     await toggleSaveQuestion({
       userId: JSON.parse(userId),
@@ -109,12 +109,16 @@ const Votes = ({
     }
   };
 
-  // useEffect(() => {
-  //   viewQuestion({
-  //     questionId: JSON.parse(itemId),
-  //     userId: userId ? JSON.parse(userId) : undefined,
-  //   })
-  // }, [itemId, userId, pathname, router]);
+  useEffect(() => {
+    if (isInitialMount.current) {
+      viewQuestion({
+        questionId: JSON.parse(itemId),
+        userId: userId ? JSON.parse(userId) : undefined,
+      });
+      console.log("useEffect running");
+      isInitialMount.current = false;
+    }
+  }, [itemId, userId, pathname, router]);
 
   return (
     <div className="flex gap-5">
