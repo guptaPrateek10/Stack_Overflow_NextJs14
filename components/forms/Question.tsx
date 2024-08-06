@@ -35,15 +35,16 @@ const Question = ({ type, mongoUserId, questionDetails }: props) => {
   // eslint-disable-next-line no-unused-vars
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const parseQuestionDetails = JSON.parse(questionDetails || "");
-  const groupTags = parseQuestionDetails.tags.map(
+  const parseQuestionDetails =
+    questionDetails && JSON.parse(questionDetails || "");
+  const groupTags = parseQuestionDetails?.tags.map(
     (tag: { id: string; name: string }) => tag.name
   );
   const form = useForm<z.infer<typeof QuestionSchema>>({
     resolver: zodResolver(QuestionSchema),
     defaultValues: {
-      title: parseQuestionDetails.title || "",
-      explanation: parseQuestionDetails.content || "",
+      title: parseQuestionDetails?.title || "",
+      explanation: parseQuestionDetails?.content || "",
       tags: groupTags || [],
     },
   });
@@ -156,7 +157,7 @@ const Question = ({ type, mongoUserId, questionDetails }: props) => {
                   onBlur={field.onBlur}
                   onEditorChange={(content) => field.onChange(content)}
                   // initialValue={parsedQuestionDetails?.content || ''}
-                  initialValue={parseQuestionDetails.content || ""}
+                  initialValue={parseQuestionDetails?.content || ""}
                   init={{
                     height: 350,
                     menubar: false,
