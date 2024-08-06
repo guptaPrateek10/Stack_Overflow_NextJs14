@@ -6,6 +6,7 @@ import Tag from "@/database/tag.model";
 import {
   CreateQuestionParams,
   DeleteQuestionParams,
+  EditQuestionParams,
   GetQuestionByIdParams,
   GetQuestionsParams,
   QuestionVoteParams,
@@ -47,6 +48,20 @@ export async function createQuestion(params: CreateQuestionParams) {
   }
 }
 
+export async function editQuestion(params: EditQuestionParams) {
+  try {
+    connectToDatabase();
+
+    const { questionId, title, content, path } = params;
+    const question = await Question.findById(questionId).populate("tags");
+    question.title = title;
+    question.content = content;
+    await question.save();
+    revalidatePath(path);
+  } catch (error) {
+    /* to do empty for now */
+  }
+}
 export async function getQuestions(params: GetQuestionsParams) {
   try {
     connectToDatabase();

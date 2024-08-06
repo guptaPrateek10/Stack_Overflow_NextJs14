@@ -20,50 +20,58 @@ import React, { useRef, useState } from "react";
 import { useTheme } from "@/context/ThemeProvider";
 import { Badge } from "../ui/badge";
 import Image from "next/image";
-import { createQuestion } from "@/lib/actions/question.action";
+import { createQuestion, editQuestion } from "@/lib/actions/question.action";
 import { useRouter, usePathname } from "next/navigation";
-
-// interface Props {
-//     type?: string;
-//     mongoUserId: string;
-//     questionDetails?: string;
-//   }
-// const Question = ({ type, mongoUserId, questionDetails }: Props => {
-const type: any = "create";
 interface props {
+  type?: string;
   mongoUserId: string;
+  questionDetails?: string;
 }
-const Question = ({ mongoUserId }: props) => {
+const Question = ({ type, mongoUserId, questionDetails }: props) => {
   const { mode } = useTheme();
   const editorRef = useRef(null);
   const router = useRouter();
   const pathname = usePathname();
   // eslint-disable-next-line no-unused-vars
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const parseQuestionDetails = JSON.parse(questionDetails || "");
+  const groupTags = parseQuestionDetails.tags.map(
+    (tag: { id: string; name: string }) => tag.name
+  );
   const form = useForm<z.infer<typeof QuestionSchema>>({
     resolver: zodResolver(QuestionSchema),
     defaultValues: {
-      title: "",
-      explanation: "",
-      tags: [],
+      title: parseQuestionDetails.title || "",
+      explanation: parseQuestionDetails.content || "",
+      tags: groupTags || [],
     },
   });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof QuestionSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    // console.log(values);
+    setIsSubmitting(true);
+
     try {
-      await createQuestion({
-        title: values.title,
-        content: values.explanation,
-        tags: values.tags,
-        author: JSON.parse(mongoUserId),
-        path: pathname,
-      });
-      // sample
-      router.push("/");
+      if (type === "Edit") {
+        await editQuestion({
+          questionId: parseQuestionDetails._id,
+          title: values.title,
+          content: values.explanation,
+          path: pathname,
+        });
+        router.push(`/question/${parseQuestionDetails._id}`);
+      } else {
+        await createQuestion({
+          title: values.title,
+          content: values.explanation,
+          tags: values.tags,
+          author: JSON.parse(mongoUserId),
+          path: pathname,
+        });
+        // sample
+        router.push("/");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -148,7 +156,7 @@ const Question = ({ mongoUserId }: props) => {
                   onBlur={field.onBlur}
                   onEditorChange={(content) => field.onChange(content)}
                   // initialValue={parsedQuestionDetails?.content || ''}
-                  initialValue={""}
+                  initialValue={parseQuestionDetails.content || ""}
                   init={{
                     height: 350,
                     menubar: false,
