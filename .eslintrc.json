@@ -3,8 +3,11 @@
     "standard",
     "plugin:react/recommended",
     "plugin:tailwindcss/recommended",
-    "prettier"
+    "prettier",
+    "eslint:recommended",
+    "plugin:next/recommended"
   ],
+
   "rules": {
     "max-len": [2, 250],
     "no-multiple-empty-lines": [
@@ -15,5 +18,10 @@
       }
     ],
     "object-curly-newline": 0
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }
