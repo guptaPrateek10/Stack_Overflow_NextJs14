@@ -11,7 +11,8 @@ import {
 import Question from "@/database/question.model";
 import { revalidatePath } from "next/cache";
 import Interaction from "@/database/interaction.model";
-
+import { AnswerFiltersConstants } from "@/constants/filters";
+const { HIGHEST_VOTES, LOWEST_VOTES, OLD, RECENT } = AnswerFiltersConstants;
 export async function createAnswer(params: CreateAnswerParams) {
   try {
     connectToDatabase();
@@ -33,10 +34,29 @@ export async function createAnswer(params: CreateAnswerParams) {
 export async function getAnswers(params: GetAnswersParams) {
   try {
     connectToDatabase();
-    const { questionId } = params;
+    const { questionId, sortBy } = params;
+
+    let sortOptions = {};
+
+    switch (sortBy) {
+      case HIGHEST_VOTES:
+        sortOptions = { upvotes: -1 };
+        break;
+      case LOWEST_VOTES:
+        sortOptions = { upvotes: 1 };
+        break;
+      case OLD:
+        sortOptions = { createdAt: 1 };
+        break;
+      case RECENT:
+        sortOptions = { createdAt: -1 };
+        break;
+      default:
+        break;
+    }
     const answers = await Answer.find({ question: questionId })
       .populate("author", "_id clerkId username picture name")
-      .sort({ createdAt: -1 });
+      .sort(sortOptions);
     return { answers };
   } catch (error) {
     console.log(error);

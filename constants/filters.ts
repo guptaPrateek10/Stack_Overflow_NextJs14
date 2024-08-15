@@ -1,8 +1,14 @@
+export const AnswerFiltersConstants = {
+  HIGHEST_VOTES: "highestUpvotes",
+  LOWEST_VOTES: "lowestUpvotes",
+  RECENT: "recent",
+  OLD: "old",
+};
 export const AnswerFilters = [
-  { name: "Highest Upvotes", value: "highestUpvotes" },
-  { name: "Lowest Upvotes", value: "lowestUpvotes" },
-  { name: "Most Recent", value: "recent" },
-  { name: "Oldest", value: "old" },
+  { name: "Highest Upvotes", value: AnswerFiltersConstants.HIGHEST_VOTES },
+  { name: "Lowest Upvotes", value: AnswerFiltersConstants.LOWEST_VOTES },
+  { name: "Most Recent", value: AnswerFiltersConstants.RECENT },
+  { name: "Oldest", value: AnswerFiltersConstants.OLD },
 ];
 
 export const UserFiltersConstants = {
