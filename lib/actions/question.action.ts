@@ -68,11 +68,13 @@ export async function editQuestion(params: EditQuestionParams) {
 export async function getQuestions(params: GetQuestionsParams) {
   try {
     connectToDatabase();
-    const { searchQuery, filter } = params;
+    const { searchQuery, filter, page = 1, pageSize = 2 } = params;
 
     const query: FilterQuery<typeof Question> = {};
 
     let sortOptions = {};
+
+    const skipAmount = (page - 1) * pageSize;
 
     switch (filter) {
       case NEWEST:
@@ -106,9 +108,13 @@ export async function getQuestions(params: GetQuestionsParams) {
         path: "author",
         model: User,
       })
+      .skip(skipAmount)
+      .limit(pageSize)
       .sort(sortOptions);
 
-    return { questions };
+    const totalQuestion = await Question.countDocuments(query);
+    const isNext = totalQuestion > skipAmount + questions.length;
+    return { questions, isNext };
   } catch (error) {
     console.log(error);
     throw error;
