@@ -5,10 +5,15 @@ export const AnswerFilters = [
   { name: "Oldest", value: "old" },
 ];
 
+export const UserFiltersConstants = {
+  NEW_USER: "new_users",
+  OLD_USER: "old_users",
+  TOP_CONTRIBUTOR: "top_contributors",
+};
 export const UserFilters = [
-  { name: "New Users", value: "new_users" },
-  { name: "Old Users", value: "old_users" },
-  { name: "Top Contributors", value: "top_contributors" },
+  { name: "New Users", value: UserFiltersConstants.NEW_USER },
+  { name: "Old Users", value: UserFiltersConstants.OLD_USER },
+  { name: "Top Contributors", value: UserFiltersConstants.TOP_CONTRIBUTOR },
 ];
 
 export const QuestionFilters = [
@@ -26,11 +31,18 @@ export const TagFilters = [
   { name: "Old", value: "old" },
 ];
 
+export const HomePageFiltersConstents = {
+  NEWEST: "newest",
+  RECOMMENDED: "recommended",
+  FREQUENT: "frequent",
+  UNANSWERED: "unanswered",
+};
+
 export const HomePageFilters = [
-  { name: "Newest", value: "newest" },
-  { name: "Recommended", value: "recommended" },
-  { name: "Frequent", value: "frequent" },
-  { name: "Unanswered", value: "unanswered" },
+  { name: "Newest", value: HomePageFiltersConstents.NEWEST },
+  { name: "Recommended", value: HomePageFiltersConstents.RECOMMENDED },
+  { name: "Frequent", value: HomePageFiltersConstents.FREQUENT },
+  { name: "Unanswered", value: HomePageFiltersConstents.UNANSWERED },
 ];
 
 export const GlobalSearchFilters = [
