@@ -12,10 +12,6 @@ import { getJoinedDate } from "@/lib/utils";
 import Stats from "@/components/shared/Stats";
 import QuestionTab from "@/components/shared/Question.tab";
 import AnswersTab from "@/components/shared/AnswersTab";
-// import ProfileLink from '@/components/shared/ProfileLink'
-// import Stats from '@/components/shared/Stats'
-// import QuestionTab from '@/components/shared/QuestionTab'
-// import AnswersTab from '@/components/shared/AnswersTab'
 
 const Page = async ({ params, searchParams }: URLProps) => {
   const { userId: clerkId } = auth();
