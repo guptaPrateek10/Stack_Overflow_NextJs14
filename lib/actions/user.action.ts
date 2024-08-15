@@ -17,8 +17,13 @@ import Question from "@/database/question.model";
 import { FilterQuery } from "mongoose";
 import Tag from "@/database/tag.model";
 import Answer from "@/database/answer.model";
-import { UserFiltersConstants } from "@/constants/filters";
+import {
+  UserFiltersConstants,
+  QuestionFiltersConstents,
+} from "@/constants/filters";
 const { NEW_USER, OLD_USER, TOP_CONTRIBUTOR } = UserFiltersConstants;
+const { MOST_ANSWERED, MOST_RECENT, MOST_VIEWED, MOST_VOTED, OLDEST } =
+  QuestionFiltersConstents;
 export async function getUserById(params: any) {
   try {
     connectToDatabase();
@@ -111,7 +116,7 @@ export async function getAllUsers(params: GetAllUsersParams) {
       ];
     }
 
-    const users = await User.find(query).sort(sortOptions);
+    const users = await User.find(query).sort({ createdAt: -1 });
 
     return { users };
   } catch (error) {
@@ -163,11 +168,33 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
       ? { title: { $regex: new RegExp(searchQuery, "i") } }
       : {};
 
+    let sortOptions = {};
+
+    switch (filter) {
+      case MOST_RECENT:
+        sortOptions = { createdAt: -1 };
+        break;
+      case MOST_ANSWERED:
+        sortOptions = { answers: -1 };
+        break;
+      case MOST_VIEWED:
+        sortOptions = { views: -1 };
+        break;
+      case MOST_VOTED:
+        sortOptions = { upvotes: -1 };
+        break;
+      case OLDEST:
+        sortOptions = { createdAt: 1 };
+        break;
+      default:
+        break;
+    }
+
     const user = await User.findOne({ clerkId }).populate({
       path: "saved",
       match: query,
       options: {
-        sort: { createdAt: -1 },
+        sort: sortOptions,
       },
       populate: [
         { path: "tags", model: Tag, select: "_id name" },

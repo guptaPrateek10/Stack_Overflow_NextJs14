@@ -1,8 +1,14 @@
+export const AnswerFiltersConstants = {
+  HIGHEST_VOTES: "highestUpvotes",
+  LOWEST_VOTES: "lowestUpvotes",
+  RECENT: "recent",
+  OLD: "old",
+};
 export const AnswerFilters = [
-  { name: "Highest Upvotes", value: "highestUpvotes" },
-  { name: "Lowest Upvotes", value: "lowestUpvotes" },
-  { name: "Most Recent", value: "recent" },
-  { name: "Oldest", value: "old" },
+  { name: "Highest Upvotes", value: AnswerFiltersConstants.HIGHEST_VOTES },
+  { name: "Lowest Upvotes", value: AnswerFiltersConstants.LOWEST_VOTES },
+  { name: "Most Recent", value: AnswerFiltersConstants.RECENT },
+  { name: "Oldest", value: AnswerFiltersConstants.OLD },
 ];
 
 export const UserFiltersConstants = {
@@ -16,19 +22,33 @@ export const UserFilters = [
   { name: "Top Contributors", value: UserFiltersConstants.TOP_CONTRIBUTOR },
 ];
 
+export const QuestionFiltersConstents = {
+  MOST_RECENT: "most_recent",
+  OLDEST: "oldest",
+  MOST_VOTED: "most_voted",
+  MOST_VIEWED: "most_viewed",
+  MOST_ANSWERED: "most_answered",
+};
 export const QuestionFilters = [
-  { name: "Most Recent", value: "most_recent" },
-  { name: "Oldest", value: "oldest" },
-  { name: "Most Voted", value: "most_voted" },
-  { name: "Most Viewed", value: "most_viewed" },
-  { name: "Most Answered", value: "most_answered" },
+  { name: "Most Recent", value: QuestionFiltersConstents.MOST_RECENT },
+  { name: "Oldest", value: QuestionFiltersConstents.OLDEST },
+  { name: "Most Voted", value: QuestionFiltersConstents.MOST_VOTED },
+  { name: "Most Viewed", value: QuestionFiltersConstents.MOST_VIEWED },
+  { name: "Most Answered", value: QuestionFiltersConstents.MOST_ANSWERED },
 ];
 
+export const TagFiltersConstants = {
+  POPULAR: "popular",
+  RECENT: "recent",
+  NAME: "name",
+  OLD: "old",
+};
+
 export const TagFilters = [
-  { name: "Popular", value: "popular" },
-  { name: "Recent", value: "recent" },
-  { name: "Name", value: "name" },
-  { name: "Old", value: "old" },
+  { name: "Popular", value: TagFiltersConstants.POPULAR },
+  { name: "Recent", value: TagFiltersConstants.RECENT },
+  { name: "Name", value: TagFiltersConstants.NAME },
+  { name: "Old", value: TagFiltersConstants.OLD },
 ];
 
 export const HomePageFiltersConstents = {
