@@ -17,7 +17,8 @@ import Answer from "@/database/answer.model";
 import Interaction from "@/database/interaction.model";
 import { FilterQuery } from "mongoose";
 import { Regex } from "lucide-react";
-
+import { HomePageFiltersConstents } from "@/constants/filters";
+const { FREQUENT, NEWEST, RECOMMENDED, UNANSWERED } = HomePageFiltersConstents;
 export async function createQuestion(params: CreateQuestionParams) {
   try {
     connectToDatabase();
@@ -67,9 +68,28 @@ export async function editQuestion(params: EditQuestionParams) {
 export async function getQuestions(params: GetQuestionsParams) {
   try {
     connectToDatabase();
-    const { searchQuery } = params;
+    const { searchQuery, filter } = params;
 
     const query: FilterQuery<typeof Question> = {};
+
+    let sortOptions = {};
+
+    switch (filter) {
+      case NEWEST:
+        sortOptions = { createdAt: -1 };
+        break;
+      case FREQUENT:
+        sortOptions = { views: -1 };
+        break;
+      case RECOMMENDED:
+        break;
+      case UNANSWERED:
+        // sortOptions = { answers: { $gt: 0 } }
+        query.answers = { $size: 0 };
+        break;
+      default:
+        break;
+    }
 
     if (searchQuery) {
       query.$or = [
@@ -86,7 +106,7 @@ export async function getQuestions(params: GetQuestionsParams) {
         path: "author",
         model: User,
       })
-      .sort({ createdAt: -1 });
+      .sort(sortOptions);
 
     return { questions };
   } catch (error) {

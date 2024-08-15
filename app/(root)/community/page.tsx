@@ -10,10 +10,10 @@ import React from "react";
 const Page = async ({ searchParams }: SearchParamsProps) => {
   const result = await getAllUsers({
     searchQuery: searchParams.q,
+    filter: searchParams.filter,
     // page: 1,
     // page: searchParams.page? +searchParams.page : 1,
   });
-  console.log("result", result);
   return (
     <>
       <h1 className="h1-bold text-dark100_light900">All Users</h1>

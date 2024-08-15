@@ -17,7 +17,8 @@ import Question from "@/database/question.model";
 import { FilterQuery } from "mongoose";
 import Tag from "@/database/tag.model";
 import Answer from "@/database/answer.model";
-
+import { UserFiltersConstants } from "@/constants/filters";
+const { NEW_USER, OLD_USER, TOP_CONTRIBUTOR } = UserFiltersConstants;
 export async function getUserById(params: any) {
   try {
     connectToDatabase();
@@ -83,8 +84,24 @@ export async function deleteUser(userId: DeleteUserParams) {
 export async function getAllUsers(params: GetAllUsersParams) {
   try {
     connectToDatabase();
-    const { searchQuery } = params;
+    const { searchQuery, filter } = params;
     // cosnt { page , pageSize,filter,searchQuery} = params;
+
+    let sortOptions = {};
+
+    switch (filter) {
+      case NEW_USER:
+        sortOptions = { joinedAt: -1 };
+        break;
+      case NEW_USER:
+        sortOptions = { joinedAt: 1 };
+        break;
+      case NEW_USER:
+        sortOptions = { reputation: -1 };
+        break;
+      default:
+        break;
+    }
     const query: FilterQuery<typeof User> = {};
     if (searchQuery) {
       query.$or = [
@@ -94,7 +111,7 @@ export async function getAllUsers(params: GetAllUsersParams) {
       ];
     }
 
-    const users = await User.find(query).sort({ createdAt: -1 });
+    const users = await User.find(query).sort(sortOptions);
 
     return { users };
   } catch (error) {
