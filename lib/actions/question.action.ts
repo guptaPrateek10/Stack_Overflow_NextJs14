@@ -18,6 +18,7 @@ import Interaction from "@/database/interaction.model";
 import { FilterQuery } from "mongoose";
 import { Regex } from "lucide-react";
 import { HomePageFiltersConstents } from "@/constants/filters";
+import { create } from "domain";
 const { FREQUENT, NEWEST, RECOMMENDED, UNANSWERED } = HomePageFiltersConstents;
 export async function createQuestion(params: CreateQuestionParams) {
   try {
@@ -45,6 +46,17 @@ export async function createQuestion(params: CreateQuestionParams) {
     await Question.findByIdAndUpdate(question._id, {
       $push: { tags: { $each: tagsDocument } },
     });
+
+    //create an  interactions for user's asl questions
+    await Interaction.create({
+      user: author,
+      action: "ask-question",
+      question: question._id,
+      tags: tagsDocument,
+    });
+
+    //increase the reputations count for the user
+    await User.findByIdAndUpdate(author, { $inc: { reputation: 5 } });
     revalidatePath(path);
   } catch (error) {
     /* to do empty for now */
@@ -161,7 +173,16 @@ export async function upvoteQuestion(params: QuestionVoteParams) {
     if (!question) {
       throw new Error("Question not found");
     }
-    // update author reputation
+    // Increment author's reputation by +1/-1 for upvoting/revoking an upvote to the question
+    await User.findByIdAndUpdate(userId, {
+      $inc: { reputation: hasupVoted ? -1 : 1 },
+    });
+
+    // Increment author's reputation by +10/-10 for recieving an upvote/downvote to the question
+    await User.findByIdAndUpdate(question.author, {
+      $inc: { reputation: hasupVoted ? -10 : 10 },
+    });
+
     revalidatePath(path);
   } catch (error) {
     console.log(error);
