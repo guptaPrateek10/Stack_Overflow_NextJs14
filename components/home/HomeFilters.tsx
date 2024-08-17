@@ -4,14 +4,12 @@ import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
 import { formUrlQuery } from "@/lib/utils";
-
+import { HomePageFiltersConstents } from "@/constants/filters";
+const { NEWEST } = HomePageFiltersConstents;
 const HomeFilters = () => {
   const searchParams = useSearchParams();
   const [active, setActive] = useState("");
   const router = useRouter();
-  useEffect(() => {
-    setActive(HomePageFilters[0].value);
-  }, []);
 
   const handleTypeClick = (item: string) => {
     if (active === item) {
@@ -32,7 +30,10 @@ const HomeFilters = () => {
       router.push(newUrl, { scroll: false });
     }
   };
-
+  useEffect(() => {
+    setActive(HomePageFilters[0].value);
+    handleTypeClick(NEWEST);
+  }, []);
   return (
     <div className="mt-10 hidden flex-wrap gap-3 md:flex">
       {HomePageFilters.map((item) => (
