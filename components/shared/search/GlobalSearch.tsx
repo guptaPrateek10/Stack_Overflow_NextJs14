@@ -33,10 +33,10 @@ const GlobalSearch = () => {
           router.push(newUrl, { scroll: false });
         }
       }
-    }, 700);
+    }, 400);
 
     return () => clearTimeout(debounceFunction);
-  }, [search, searchParams, router, searchParams]);
+  }, [search, searchParams, router, searchParams, query]);
 
   return (
     <div className="relative w-full max-w-[600px] max-lg:hidden ">
