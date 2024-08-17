@@ -25,13 +25,10 @@ interface props {
 }
 const Answer = ({ question, questionId, authorId }: props) => {
   const pathname = usePathname();
-  // eslint-disable-next-line no-unused-vars
   const [isSubmitting, setIsSubmitting] = useState(false);
-  // eslint-disable-next-line no-unused-vars
   const [isSubmittingAI, setSetIsSubmittingAI] = useState(false);
   const { mode } = useTheme();
 
-  console.log("mode", mode);
   const editorRef = useRef(null);
   const form = useForm<z.infer<typeof AnswerSchema>>({
     resolver: zodResolver(AnswerSchema),
@@ -39,7 +36,33 @@ const Answer = ({ question, questionId, authorId }: props) => {
       answer: "",
     },
   });
-  const generateAIAnswer = () => {};
+  const generateAIAnswer = async () => {
+    if (!authorId) return;
+    setSetIsSubmittingAI(true);
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}api/chatgpt`,
+        {
+          method: "POST",
+          body: JSON.stringify({ question }),
+        }
+      );
+
+      const aiAnswer = await res.json();
+      alert(aiAnswer?.reply);
+      // const formattedAnswer = aiAnswer.reply.replace(/\n/g, "<br />");
+
+      // if (editorRef.current) {
+      //   const editor = editorRef.current as any;
+      //   editor.setContent(formattedAnswer);
+      // }
+    } catch (error) {
+      alert(error);
+      throw error;
+    } finally {
+      setSetIsSubmittingAI(false);
+    }
+  };
 
   const handleCreateAnswer = async (value: z.infer<typeof AnswerSchema>) => {
     setIsSubmitting(true);
