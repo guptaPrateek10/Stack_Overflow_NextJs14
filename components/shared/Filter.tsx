@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/select";
 import { formUrlQuery } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 // import { useRouter, useSearchParams } from "next/navigation";
 
 interface Props {
