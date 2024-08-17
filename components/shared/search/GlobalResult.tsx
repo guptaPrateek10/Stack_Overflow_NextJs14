@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
@@ -17,6 +17,7 @@ const GlobalResult = () => {
 
   const global = searchParams.get("global");
   const type = searchParams.get("type");
+
   useEffect(() => {
     const fetchResult = async () => {
       setResult([]);
