@@ -11,8 +11,7 @@ import { formatAndDivideNumber } from "@/lib/utils";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
-// import { toast } from "../ui/use-toast";
-
+import useToast from "../../hooks/useToast";
 interface Props {
   type: string;
   itemId: string;
@@ -34,29 +33,29 @@ const Votes = ({
   hasdownVoted,
   hasSaved,
 }: Props) => {
+  const { Success, Error, Info } = useToast();
   const pathname = usePathname();
   const router = useRouter();
   const isInitialMount = useRef(true);
   const handleSave = async () => {
+    Info("Submitting request...");
     await toggleSaveQuestion({
       userId: JSON.parse(userId),
       questionId: JSON.parse(itemId),
       path: pathname,
     });
 
-    // return toast({
-    //   title: `Question ${!hasSaved ? 'Saved in' : 'Removed from'} your collection`,
-    //   variant: !hasSaved ? 'default' : 'destructive'
-    // })
+    if (!hasSaved) {
+      Success("Question saved successfully to your collection");
+    } else if (hasSaved) {
+      Error("Question removed from your collection");
+    }
   };
 
   const handleVote = async (action: string) => {
     if (!userId) {
+      Info("You must be logged in to perform this action");
       return;
-      // return toast({
-      //   title: 'Please log in',
-      //   description: 'You must be logged in to perform this action',
-      // })
     }
 
     if (action === "upvote") {
@@ -77,11 +76,7 @@ const Votes = ({
           path: pathname,
         });
       }
-      return;
-      // return toast({
-      //   title: `Upvote ${!hasupVoted ? 'Successful' : 'Removed'}`,
-      //   variant: !hasupVoted ? 'default' : 'destructive'
-      // })
+      Success(`Upvote ${!hasupVoted ? "Successful" : "Removed"}`);
     }
 
     if (action === "downvote") {
@@ -102,10 +97,7 @@ const Votes = ({
           path: pathname,
         });
       }
-      // return toast({
-      //   title: `Downvote ${!hasupVoted ? 'Successful' : 'Removed'}`,
-      //   variant: !hasupVoted ? 'default' : 'destructive'
-      // })
+      Success(`Downvote ${!hasdownVoted ? "Successful" : "Removed"}`);
     }
   };
 
@@ -115,7 +107,6 @@ const Votes = ({
         questionId: JSON.parse(itemId),
         userId: userId ? JSON.parse(userId) : undefined,
       });
-      console.log("useEffect running");
       isInitialMount.current = false;
     }
   }, [itemId, userId, pathname, router]);

@@ -18,6 +18,7 @@ import { Button } from "../ui/button";
 import Image from "next/image";
 import { createAnswer } from "@/lib/actions/answer.action";
 import { usePathname } from "next/navigation";
+import useToast from "../../hooks/useToast";
 interface props {
   question: string;
   questionId: string;
@@ -25,6 +26,7 @@ interface props {
 }
 const Answer = ({ question, questionId, authorId }: props) => {
   const pathname = usePathname();
+  const { Success, Error, Info } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmittingAI, setSetIsSubmittingAI] = useState(false);
   const { mode } = useTheme();
@@ -66,6 +68,7 @@ const Answer = ({ question, questionId, authorId }: props) => {
 
   const handleCreateAnswer = async (value: z.infer<typeof AnswerSchema>) => {
     setIsSubmitting(true);
+    Info("Submitting answer...");
     try {
       await createAnswer({
         content: value.answer,
@@ -79,7 +82,9 @@ const Answer = ({ question, questionId, authorId }: props) => {
         const editor = editorRef.current as any;
         editor.setContent("");
       }
+      Success("Answer submitted successfully!");
     } catch (error) {
+      Error("Something went wrong! Please try again.");
       console.log(error);
       throw error;
     } finally {

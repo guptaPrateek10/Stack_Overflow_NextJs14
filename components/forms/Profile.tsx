@@ -19,11 +19,14 @@ import { Input } from "@/components/ui/input";
 import { ProfileSchema } from "@/lib/validation";
 import { usePathname, useRouter } from "next/navigation";
 import { updateUser } from "@/lib/actions/user.action";
+import useToast from "../../hooks/useToast";
+import { Error } from "mongoose";
 type ProfileProps = {
   clerkId: string;
   user: string;
 };
 const Profile = ({ clerkId, user }: ProfileProps) => {
+  const { Success, Error, Info } = useToast();
   const parsedUser = JSON.parse(user);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -43,6 +46,7 @@ const Profile = ({ clerkId, user }: ProfileProps) => {
 
   async function onSubmit(values: z.infer<typeof ProfileSchema>) {
     setIsSubmitting(true);
+    Info("Submitting profile...");
     try {
       await updateUser({
         clerkId,
@@ -55,9 +59,10 @@ const Profile = ({ clerkId, user }: ProfileProps) => {
         },
         path: pathName,
       });
-      console.log(values);
+      Success("Profile updated successfully!");
       router.back();
     } catch (error) {
+      Error("Something went wrong! Please try again.");
       console.log(error);
     } finally {
       setIsSubmitting(false);
