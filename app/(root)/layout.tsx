@@ -3,7 +3,7 @@ import RightSidebar from "@/components/shared/RightSidebar";
 import Navbar from "@/components/shared/navbar/Navbar";
 import React from "react";
 import "../../styles/prism.css";
-
+import { Toaster } from "sonner";
 type LayoutProps = {
   children: React.ReactNode;
 };
@@ -19,7 +19,8 @@ const Layout = ({ children }: LayoutProps) => {
         </section>
         <RightSidebar />
       </div>
-      Toaster component
+
+      <Toaster position="bottom-right" richColors/>
     </main>
   );
 };
