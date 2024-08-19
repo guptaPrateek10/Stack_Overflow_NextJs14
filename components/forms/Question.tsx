@@ -22,7 +22,7 @@ import { Badge } from "../ui/badge";
 import Image from "next/image";
 import { createQuestion, editQuestion } from "@/lib/actions/question.action";
 import { useRouter, usePathname } from "next/navigation";
-import {  toast } from 'sonner'
+import useToast from "../../hooks/useToast";
 interface props {
   type?: string;
   mongoUserId: string;
@@ -30,6 +30,7 @@ interface props {
 }
 const Question = ({ type, mongoUserId, questionDetails }: props) => {
   const { mode } = useTheme();
+  const { Success, Error, Info } = useToast();
   const editorRef = useRef(null);
   const router = useRouter();
   const pathname = usePathname();
@@ -53,7 +54,7 @@ const Question = ({ type, mongoUserId, questionDetails }: props) => {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof QuestionSchema>) {
     setIsSubmitting(true);
-
+    Info("Submitting request...");
     try {
       if (type === "Edit") {
         await editQuestion({
@@ -62,7 +63,7 @@ const Question = ({ type, mongoUserId, questionDetails }: props) => {
           content: values.explanation,
           path: pathname,
         });
-        toast.success("Question was edited successfully")
+        Success("Question was edited successfully");
         router.push(`/question/${parseQuestionDetails._id}`);
       } else {
         await createQuestion({
@@ -73,11 +74,11 @@ const Question = ({ type, mongoUserId, questionDetails }: props) => {
           path: pathname,
         });
         // sample
-        toast.success("Question was successfully submitted")
+        Success("Question was successfully submitted");
         router.push("/");
       }
     } catch (error) {
-      toast.error("Something went wrong! Please try again.")
+      Error("Something went wrong! Please try again.");
       console.log(error);
     }
   }
