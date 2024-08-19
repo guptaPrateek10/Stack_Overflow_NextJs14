@@ -22,6 +22,7 @@ import { Badge } from "../ui/badge";
 import Image from "next/image";
 import { createQuestion, editQuestion } from "@/lib/actions/question.action";
 import { useRouter, usePathname } from "next/navigation";
+import {  toast } from 'sonner'
 interface props {
   type?: string;
   mongoUserId: string;
@@ -61,6 +62,7 @@ const Question = ({ type, mongoUserId, questionDetails }: props) => {
           content: values.explanation,
           path: pathname,
         });
+        toast.success("Question was edited successfully")
         router.push(`/question/${parseQuestionDetails._id}`);
       } else {
         await createQuestion({
@@ -71,9 +73,11 @@ const Question = ({ type, mongoUserId, questionDetails }: props) => {
           path: pathname,
         });
         // sample
+        toast.success("Question was successfully submitted")
         router.push("/");
       }
     } catch (error) {
+      toast.error("Something went wrong! Please try again.")
       console.log(error);
     }
   }
