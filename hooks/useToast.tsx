@@ -1,15 +1,15 @@
-
-import { toast } from 'sonner';
+import { toast } from "sonner";
 const useToast = () => {
-  const Success = (message:string) => {
+  const Success = (message: string) => {
     toast.success(message);
   };
-  const Error = (message:string) => {
+  const Error = (message: string) => {
     toast.error(message);
   };
-  const Info = (message:string) => {
+  const Info = (message: string) => {
     toast.info(message);
   };
+
   return {
     Success,
     Error,
